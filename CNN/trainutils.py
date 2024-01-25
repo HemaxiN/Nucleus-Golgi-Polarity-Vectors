@@ -174,7 +174,7 @@ def get_callbacks(model_file, logging_file, initial_learning_rate=0.0001, learni
 
 def load_old_model(model_file):
         print("Loading pre-trained model")
-        custom_objects = {'mean_se': mean_se, 'mse':mse, 'weighted_joint_loss_function':weighted_joint_loss_function}
+        custom_objects = {'mean_se': mean_se, 'mse':mse, 'weighted_mean_se':weighted_mean_se}
         try:
                 from keras_contrib.layers import InstanceNormalization
                 custom_objects["InstanceNormalization"] = InstanceNormalization

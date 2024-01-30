@@ -5,6 +5,6 @@ Official implementation of the paper submitted to the 2024 Annual International 
 * The implementation of the CNN for nuclei and Golgi detection is available [here](https://github.com/HemaxiN/Nucleus-Golgi-Polarity-Vectors/tree/main/CNN).
 * The implementation of the GNN for nucleus-Golgi link prediction is available [here](https://github.com/HemaxiN/Nucleus-Golgi-Polarity-Vectors/tree/main/GNN).
 
-![]([https://https://github.com/HemaxiN/Polarity-Vectors/tree/main/Images/approach.png](https://github.com/HemaxiN/Polarity-Vectors/blob/main/Images/approach.png)https://github.com/HemaxiN/Polarity-Vectors/blob/main/Images/approach.png)
+![]([https://https://github.com/HemaxiN/Polarity-Vectors/tree/main/Images/approach.png)
 
   

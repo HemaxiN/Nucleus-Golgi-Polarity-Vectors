@@ -11,10 +11,6 @@ The ***data*** folder contains the input data in .csv format:
 - ***data/vectors***, contains the data for the manually annotated graphs.
 - ***data/vectors_automatic_csv***, contains the data for the graphs with centroids detected by the CNN centroid detection model.
 
-## Results
-
-The ***results*** folder contais the results saved in the same .csv format as the input data.
-
 ## Source
 
 The ***src*** folder contains the source code for the link prediction, evaluation and visualizations:

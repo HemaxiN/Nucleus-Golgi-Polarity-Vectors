@@ -1,5 +1,5 @@
 # Graph-Neural-Networks-for-Polarity-Vectors-Prediction-in-3D-Microscopy-Images
-Paper accepted in 2024 Annual International Conference of the IEEE Engineering in Medicine and Biology Society, to be held in Orlando, Florida, USA, July 15-19, 2024 ([https://embc.embs.org/2024/](https://embc.embs.org/2024/)).
+Paper submited at 2024 Annual International Conference of the IEEE Engineering in Medicine and Biology Society, to be held in Orlando, Florida, USA, July 15-19, 2024 ([https://embc.embs.org/2024/](https://embc.embs.org/2024/)).
 
 ## Requirements
 
@@ -10,6 +10,10 @@ Install from "conda_requirements.txt" to install for a conda environment or "pip
 The ***data*** folder contains the input data in .csv format:
 - ***data/vectors***, contains the data for the manually annotated graphs.
 - ***data/vectors_automatic_csv***, contains the data for the graphs with centroids detected by the CNN centroid detection model.
+
+## Results
+
+The ***results*** folder contais the results saved in the same .csv format as the input data.
 
 ## Source
 
@@ -23,3 +27,6 @@ The ***src*** folder contains the source code for the link prediction, evaluatio
 ## Figures
 
 The figures folders contains visualizations that allow to interpret the results qualitatively. These figures are genereated using the source code in ***3_analyze_results.ipynb**, which takes as input the results contained in the ***results*** folder in order to generate the figures. 
+
+![Polarity Vectors Prediction](https://github.com/esyker/Graph-Neural-Networks-for-Polarity-Vectors-Prediction-in-3D-Microscopy-Images/blob/main/figures/automatic_normalized/merged-crops-1-8.jpg)
+

@@ -158,6 +158,8 @@ def get_edge_features(edges_df, nodes_df,
                             reversed_nodes_type_int_encodings = reversed_nodes_type_int_encodings, 
                         edges_type_int_encodings = edges_type_int_encodings):
     # Initialize lists to store calculated metrics
+    x1_values, y1_values, z1_values, node_type1_values = [], [], [], []
+    x2_values, y2_values, z2_values, node_type2_values = [], [], [], []
     delta_x_values = []
     delta_y_values = []
     delta_z_values = []
@@ -183,6 +185,16 @@ def get_edge_features(edges_df, nodes_df,
         weight = np.sqrt(delta_x**2 + delta_y**2 + delta_z**2)
 
         # Append calculated values to respective lists
+        x1_values.append(source_node['X'])
+        y1_values.append(source_node['Y'])
+        z1_values.append(source_node['Z'])
+        node_type1_values.append(source_node['node_type'])
+
+        x2_values.append(target_node['X'])
+        y2_values.append(target_node['Y'])
+        z2_values.append(target_node['Z'])
+        node_type2_values.append(target_node['node_type'])
+
         delta_x_values.append(delta_x)
         delta_y_values.append(delta_y)
         delta_z_values.append(delta_z)
@@ -197,6 +209,16 @@ def get_edge_features(edges_df, nodes_df,
         edge_type_values.append(edges_type_int_encodings[edge_type_string])
 
     # Add the lists as new columns to edges_df
+    edges_df['x1'] = x1_values
+    edges_df['y1'] = y1_values
+    edges_df['z1'] = z1_values
+    edges_df['node_type1'] = node_type1_values
+
+    edges_df['x2'] = x2_values
+    edges_df['y2'] = y2_values
+    edges_df['z2'] = z2_values
+    edges_df['node_type2'] = node_type2_values
+
     edges_df['delta_x'] = delta_x_values
     edges_df['delta_y'] = delta_y_values
     edges_df['delta_z'] = delta_z_values
@@ -406,8 +428,11 @@ def eval_edges_df(edges_df_true, edges_df_pred):
     
     metrics["acc"] = round(calculate_acc(tp, fp, tn, fn) ,3)
     metrics["precision"] = round(calculate_precision(tp, fp) ,3)
-    metrics["recall"] = round(calculate_recall(tp, fn) ,3)
-    metrics["f1_score"] = round(calculate_f1_score(metrics["precision"], metrics["recall"]),3)
+
+    metrics["TPR"] = round(calculate_recall(tp, fn) ,3)
+    metrics["FPR"] = round(calculate_fpr(fp, tn),3)
+    metrics["f1_score"] = round(calculate_f1_score(metrics["precision"], metrics["TPR"]),3)
+
     metrics["tp_percent"] = round(tp/tp_total_count,3) if tp_total_count > 0 else 0
     metrics["tp_total_count"] = round(tp_total_count,3)
     
@@ -737,9 +762,11 @@ def get_graph_list(data_type, k_inter, k_intra, k_inter_max, scale_feats = True,
 def normalize_df(df):
     
     global_normalization = {"x":200, "y":150, "z":10, "delta":9}
+
     global_normalization["norm"] = np.sqrt(3*global_normalization["delta"]**2)
 
     data_columns = {"X":"x","Y":"y","Z":"z", 
+                    "x1":"x", "x2":"x", "y1":"y", "y2":"y", "z1":"z", "z2":"z",
                     "weight":"norm",
                     "XN":"x","YN":"y","ZN":"z", "XG":"x","YG":"y","ZG":"z",
                      "delta_x":"delta","delta_y":"delta","delta_z":"delta"}
@@ -1100,7 +1127,8 @@ def plot_table(results_list, metrics_dict_entries = [["@best","metrics"],["@best
             
             acc =  metrics_dict["acc"]
             precision = metrics_dict["precision"]
-            recall = metrics_dict["recall"]
+            TPR = metrics_dict["TPR"]
+            FPR = metrics_dict["FPR"]
             f1_score = metrics_dict["f1_score"]
             fn = metrics_dict["fn"]
             tp = metrics_dict["tp"]
@@ -1115,7 +1143,8 @@ def plot_table(results_list, metrics_dict_entries = [["@best","metrics"],["@best
             formatted_rouc_auc_score = f"{rouc_auc_score:.3f}" if isinstance(rouc_auc_score, float) else rouc_auc_score
             formatted_acc= f"{acc:.3f}" if isinstance(acc, float) else acc
             formatted_precision = f"{precision:.3f}" if isinstance(precision, float) else precision
-            formatted_recall = f"{recall:.3f}" if isinstance(recall, float) else recall
+            formatted_TPR = f"{TPR:.3f}" if isinstance(TPR, float) else TPR
+            formated_fpr = f"{FPR:.3f}" if isinstance(FPR, float) else FPR
             formatted_f1_score = f"{f1_score:.3f}" if isinstance(f1_score, float) else f1_score
             formatted_tp = f"{tp:.3f}" if isinstance(tp, float) else tp
             formatted_fn = f"{fn:.3f}" if isinstance(fn, float) else fn
@@ -1130,7 +1159,7 @@ def plot_table(results_list, metrics_dict_entries = [["@best","metrics"],["@best
                 "Scale": scale_features, "Node Feat.": node_feats, "Edge Feat.": edge_feats,
                 "K Intra": formatted_k_intra, "K Inter": formatted_k_inter, 
                 "ROC AUC Score": formatted_rouc_auc_score, "Accuracy": formatted_acc, 
-                "Precision": formatted_precision, "Recall": formatted_recall, "F1-Score": formatted_f1_score,
+                "Precision": formatted_precision, "TPR": formatted_TPR, "FPR": formated_fpr, "F1-Score": formatted_f1_score,
                 "TP Percent": formatted_tp_percent, "TP Total Count": formatted_tp_total_count, 
                 "TP":formatted_tp, "FP":formatted_fp, "TN":formatted_tn, "FN":formatted_fn
             }
@@ -1139,11 +1168,12 @@ def plot_table(results_list, metrics_dict_entries = [["@best","metrics"],["@best
     df = pd.DataFrame(df_entries).reset_index(drop=True)
     return df
 
-def plot_df_to_latex(df, columns_to_drop = ['TP Total Count'], columns_min = ['FP', 'FN'], columns_max = ['ROC AUC Score', 
+def plot_df_to_latex(df, columns_to_drop = ['TP Total Count'], columns_min = ['FP', 'FN','TPR'], columns_max = ['ROC AUC Score', 
                             'TP Percent', 'F1-Score','Accuracy','Precision',
-                             'Recall', "TP", "TN"]):
+                             'TPR', "TP", "TN"]):
     #https://github.com/pandas-dev/pandas/issues/38328
     columns_to_drop = [col for col in columns_to_drop if col in  df.columns.tolist()]
+    
     df = df.drop(columns=columns_to_drop)
 
     columns_min = [col for col in columns_min if col in  df.columns.tolist()]
@@ -1176,6 +1206,13 @@ def calculate_recall(tp, fn):
     denominator = (tp+fn)
     if(denominator!=0):
         return tp/denominator
+    else:
+        return 0
+    
+def calculate_fpr(fp, tn):
+    denominator = (fp+tn)
+    if(denominator!=0):
+        return fp/denominator
     else:
         return 0
     
@@ -1250,8 +1287,9 @@ def eval_metrics(true : List, pred_labels : List, tp_total_count : int):
     
     metrics["acc"] = round(calculate_acc(tp, fp, tn, fn) ,3)
     metrics["precision"] = round(calculate_precision(tp, fp) ,3)
-    metrics["recall"] = round(calculate_recall(tp, fn) ,3)
-    metrics["f1_score"] = round(calculate_f1_score(metrics["precision"], metrics["recall"]),3)
+    metrics["TPR"] = round(calculate_recall(tp, fn) ,3)
+    metrics["FPR"] = round(calculate_fpr(fp, tn),3)
+    metrics["f1_score"] = round(calculate_f1_score(metrics["precision"], metrics["TPR"]),3)
     
     metrics["tp_percent"] = round(tp/tp_total_count,3) if tp_total_count>0 else 0
     metrics["tp_total_count"] = tp_total_count
@@ -1261,8 +1299,9 @@ def eval_metrics(true : List, pred_labels : List, tp_total_count : int):
 @torch.no_grad()
 def aggregate_metrics(measurements):
     
-    #computed metrics -> "acc", "precision", "recall", "tp", fp", "tn", "fn"
-    aggregation_dict = {"acc":"mean", "precision":"mean", "recall":"mean", "f1_score":"mean", "tp":"sum", "fp":"sum", "tn":"sum", "fn":"sum","optimal_threshold":"mean", "tp_percent":"mean", "tp_total_count":"sum"}
+    aggregation_dict = {"acc":"mean", "precision":"mean", "TPR":"mean", "FPR":"mean", "f1_score":"mean", 
+                        "tp":"sum", "fp":"sum", "tn":"sum", "fn":"sum",
+                        "optimal_threshold":"mean", "tp_percent":"mean", "tp_total_count":"sum"}
     
     #initialization
     aggregated_metrics = {}

@@ -1,0 +1,209 @@
+{
+  "job_parameters": {
+    "data_type_train": "../data/synthetic_algo_200_points",
+    "data_type_test": "../data/synthetic_algo_200_points",
+    "model_type": "GNN_Classifier_Recurrent_WithNodeFeats",
+    "knn_inter_nodes": 10,
+    "knn_inter_nodes_max": 7,
+    "knn_intra_nodes": 0,
+    "normalize": false,
+    "node_feats": [
+      "Y",
+      "X",
+      "Z",
+      "node_type"
+    ],
+    "edge_feats": [
+      "delta_x",
+      "delta_y",
+      "delta_z",
+      "weight",
+      "angle_orientation_theta",
+      "angle_orientation_phi"
+    ],
+    "to_undirected": false,
+    "lr": 0.001,
+    "n_epochs": 100,
+    "early_stopper": null,
+    "scheduler": null,
+    "pos_weight": true,
+    "criterion": "BCEWithLogitsLoss",
+    "device": "cpu",
+    "scale_features": false,
+    "index_train": "all",
+    "index_test": "all",
+    "cross_validation_groups_train": "even",
+    "cross_validation_groups_test": "even",
+    "num_classes": 1,
+    "num_node_features": 4,
+    "num_edge_features": 6,
+    "num_total_features": 14
+  },
+  "aggregated_metrics": {
+    "rouc_auc_score": 0.991125,
+    "rouc_auc_curve": {
+      "fpr": [
+        0.0,
+        0.0,
+        0.0,
+        0.0011111111111111111,
+        0.0011111111111111111,
+        0.0022222222222222222,
+        0.0022222222222222222,
+        0.005555555555555556,
+        0.005555555555555556,
+        0.0077777777777777776,
+        0.0077777777777777776,
+        0.01,
+        0.01,
+        0.016666666666666666,
+        0.016666666666666666,
+        0.02,
+        0.02,
+        0.023333333333333334,
+        0.023333333333333334,
+        0.04,
+        0.04,
+        1.0
+      ],
+      "tpr": [
+        0.0,
+        0.01,
+        0.12,
+        0.12,
+        0.89,
+        0.89,
+        0.9,
+        0.9,
+        0.91,
+        0.91,
+        0.92,
+        0.92,
+        0.93,
+        0.93,
+        0.95,
+        0.95,
+        0.98,
+        0.98,
+        0.99,
+        0.99,
+        1.0,
+        1.0
+      ],
+      "thresholds": [
+        Infinity,
+        0.991748571395874,
+        0.9841940999031067,
+        0.9837151169776917,
+        0.947899580001831,
+        0.9476902484893799,
+        0.9470752477645874,
+        0.9405524730682373,
+        0.9351999759674072,
+        0.9318010807037354,
+        0.9246688485145569,
+        0.9178348779678345,
+        0.9017900824546814,
+        0.8549721240997314,
+        0.8462426662445068,
+        0.7908796072006226,
+        0.7410050630569458,
+        0.3426947295665741,
+        0.2076660692691803,
+        0.011478867381811142,
+        0.009200002998113632,
+        2.852094101757273e-23
+      ]
+    },
+    "@best": {
+      "metrics": {
+        "acc": 0.9655,
+        "precision": 0.761125,
+        "TPR": 0.96875,
+        "FPR": 0.034625,
+        "f1_score": 0.850875,
+        "tp": 775,
+        "fp": 251,
+        "tn": 6949,
+        "fn": 25,
+        "tp_percent": 0.96875,
+        "tp_total_count": 800
+      },
+      "@constraints": {
+        "metrics": {
+          "acc": 0.974625,
+          "precision": 0.8825000000000001,
+          "TPR": 0.85875,
+          "FPR": 0.01225,
+          "f1_score": 0.87025,
+          "tp": 687,
+          "fp": 90,
+          "tn": 7110,
+          "fn": 113,
+          "tp_percent": 0.85875,
+          "tp_total_count": 800
+        }
+      }
+    },
+    "@0.5": {
+      "metrics": {
+        "acc": 0.9652499999999999,
+        "precision": 0.759625,
+        "TPR": 0.96875,
+        "FPR": 0.035124999999999997,
+        "f1_score": 0.850125,
+        "tp": 775,
+        "fp": 253,
+        "tn": 6947,
+        "fn": 25,
+        "tp_percent": 0.96875,
+        "tp_total_count": 800
+      },
+      "@constraints": {
+        "metrics": {
+          "acc": 0.9744999999999999,
+          "precision": 0.88225,
+          "TPR": 0.8574999999999999,
+          "FPR": 0.01225,
+          "f1_score": 0.8694999999999999,
+          "tp": 686,
+          "fp": 90,
+          "tn": 7110,
+          "fn": 114,
+          "tp_percent": 0.8574999999999999,
+          "tp_total_count": 800
+        }
+      }
+    },
+    "@constraints": {
+      "metrics": {
+        "acc": 0.9738749999999999,
+        "precision": 0.86975,
+        "TPR": 0.86875,
+        "FPR": 0.014249999999999999,
+        "f1_score": 0.86925,
+        "tp": 695,
+        "fp": 104,
+        "tn": 7096,
+        "fn": 105,
+        "tp_percent": 0.86875,
+        "tp_total_count": 800
+      }
+    },
+    "@constraints_opt": {
+      "metrics": {
+        "acc": 0.975,
+        "precision": 0.875,
+        "TPR": 0.875,
+        "FPR": 0.014,
+        "f1_score": 0.875,
+        "tp": 700,
+        "fp": 100,
+        "tn": 7100,
+        "fn": 100,
+        "tp_percent": 0.875,
+        "tp_total_count": 800
+      }
+    }
+  }
+}
